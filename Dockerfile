@@ -29,7 +29,7 @@ RUN set -ex \
     && rm -rf /var/tmp/yum*
 
 COPY nginx.conf /etc/nginx/nginx.conf
-COPY conf.d /etc/nginx/
+COPY conf.d /etc/nginx/conf.d
 
 EXPOSE 80
 
