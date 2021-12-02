@@ -66,7 +66,7 @@ server {
 docker run --name nginx -d --restart=always \
   -p 80:80 -p 443:443 \
   -v /opt/sslkey:/etc/nginx/sslkey \
-  -v /opt/default.conf:/etc/nginx/conf.d/default.conf
+  -v /opt/default.conf:/etc/nginx/conf.d/default.conf \
   wojiushixiaobai/gmssl_nginx:latest
 ```
 
@@ -101,8 +101,10 @@ server {
     server_name test.domain.localhost;  # 自行修改成你的域名
 
     ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
-    ssl_ciphers ECDHE-RSA-AES128-GCM-SHA256:AES128-SHA:DES-CBC3-SHA:ECC-SM4-CBC-SM3:ECDHE-SM4-GCM-SM3;  # 算法
+    ssl_ciphers ECC-SM4-SM3:ECDH:AESGCM:HIGH:MEDIUM:!RC4:!DH:!MD5:!aNULL:!eNULL;  # 算法
     ssl_verify_client off;
+    ssl_session_timeout 5m;
+    ssl_prefer_server_ciphers on;
 
     ssl_certificate sslkey/test.domain.localhost_sm2_sign_bundle.crt;      # 配置国密签名证书/私钥
     ssl_certificate_key sslkey/test.domain.localhost_SM2.key;
@@ -121,6 +123,6 @@ server {
 docker run --name nginx -d --restart=always \
   -p 80:80 -p 443:443 \
   -v /opt/sslkey:/etc/nginx/sslkey \
-  -v /opt/default.conf:/etc/nginx/conf.d/default.conf
+  -v /opt/default.conf:/etc/nginx/conf.d/default.conf \
   wojiushixiaobai/wotrus_nginx:latest
 ```
