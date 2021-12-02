@@ -1,4 +1,4 @@
-name: Buildx GMSSL Nginx
+name: Buildx WoTrus Nginx
 
 on:
   push:
@@ -23,11 +23,11 @@ jobs:
       uses: ilteoood/docker_buildx@master
       with:
         publish: true
-        imageName: wojiushixiaobai/gmssl_nginx
+        imageName: wojiushixiaobai/wotrus_nginx
         dockerUser: wojiushixiaobai
         dockerPassword: ${{ secrets.DOCKER_HUB_TOKEN }}
         tag: ${{ steps.get_tag.outputs.TAG }},latest
-        dockerFile: Dockerfile
+        dockerFile: wotrus/Dockerfile
         platform: linux/amd64
 
     - name: Build Docker Image for GitHub
@@ -35,9 +35,9 @@ jobs:
       with:
         publish: true
         dockerServer: ghcr.io
-        imageName: ghcr.io/wojiushixiaobai/gmssl_nginx
+        imageName: ghcr.io/wojiushixiaobai/wotrus_nginx
         dockerUser: wojiushixiaobai
         dockerPassword: ${{ secrets.GITHUB_TOKEN }}
         tag: ${{ steps.get_tag.outputs.TAG }},latest
-        dockerFile: Dockerfile
+        dockerFile: wotrus/Dockerfile
         platform: linux/amd64
