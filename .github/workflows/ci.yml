@@ -29,7 +29,6 @@ jobs:
         tag: ${{ steps.get_tag.outputs.TAG }},latest
         dockerFile: Dockerfile
         platform: linux/amd64
-        buildArg:
 
     - name: Build Docker Image for GitHub
       uses: ilteoood/docker_buildx@master
@@ -42,4 +41,3 @@ jobs:
         tag: ${{ steps.get_tag.outputs.TAG }},latest
         dockerFile: Dockerfile
         platform: linux/amd64
-        buildArg:
