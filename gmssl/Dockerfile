@@ -12,7 +12,7 @@ RUN set -ex \
     && yum -y install wget gcc make pcre-devel zlib-devel \
     && ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     && echo "LANG=$LANG" > /etc/locale.conf \
-    && wget https://www.gmssl.cn/gmssl/Tool_Down?File=gmssl_openssl_${GMSSL_VERSION}.tar.gz -O /opt/gmssl_openssl_${GMSSL_VERSION}.tar.gz \
+    && wget https://www.gmssl.cn/gmssl/down/gmssl_openssl_${GMSSL_VERSION}.tar.gz -O /opt/gmssl_openssl_${GMSSL_VERSION}.tar.gz \
     && tar xf /opt/gmssl_openssl_${GMSSL_VERSION}.tar.gz -C /usr/local \
     && wget http://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz \
     && tar xf nginx-${NGINX_VERSION}.tar.gz \
