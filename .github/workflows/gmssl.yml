@@ -28,7 +28,7 @@ jobs:
         dockerPassword: ${{ secrets.DOCKER_HUB_TOKEN }}
         tag: ${{ steps.get_tag.outputs.TAG }},latest
         dockerFile: gmssl/Dockerfile
-        platform: linux/amd64,linux/arm64
+        platform: linux/amd64
 
     - name: Build Docker Image for GitHub
       uses: ilteoood/docker_buildx@master
@@ -40,4 +40,4 @@ jobs:
         dockerPassword: ${{ secrets.GITHUB_TOKEN }}
         tag: ${{ steps.get_tag.outputs.TAG }},latest
         dockerFile: gmssl/Dockerfile
-        platform: linux/amd64,linux/arm64
+        platform: linux/amd64
