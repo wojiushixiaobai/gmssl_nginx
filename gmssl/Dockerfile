@@ -59,6 +59,7 @@ COPY conf.d /etc/nginx/conf.d
 FROM debian:bullseye-slim
 ARG TARGETARCH
 
+ADD sources.list /etc/apt/sources.list
 COPY --from=builder /usr/sbin/nginx /usr/sbin/nginx
 COPY --from=builder /etc/nginx /etc/nginx
 COPY --from=builder /usr/share/nginx /usr/share/nginx
@@ -69,8 +70,6 @@ RUN set -ex \
     && adduser --system --disabled-login --ingroup nginx --no-create-home --home /nonexistent --gecos "nginx user" --shell /bin/false --uid 101 nginx \
     && apt-get update \
     && apt-get install --no-install-recommends --no-install-suggests -y curl ca-certificates \
-    && 
-    && \
     ldd /usr/sbin/nginx \
     | awk '/=>/ { print $(NF-1) }' \
     | sort -u \
