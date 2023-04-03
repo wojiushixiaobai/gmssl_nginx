@@ -3,7 +3,7 @@ ARG TARGETARCH
 
 ENV NGINX_VERSION 1.22.1
 
-WORKDIR /opt
+WORKDIR /data/builder/debuild
 
 ADD sources.list /etc/apt/sources.list
 ARG SSL_NAMR=wotrus_ssl
@@ -36,20 +36,18 @@ RUN set -ex \
     && echo "deb-src [signed-by=/usr/share/keyrings/nginx-archive-keyring.gpg] https://nginx.org/packages/mainline/debian bullseye nginx" >> /etc/apt/sources.list.d/nginx.list \
     && apt-get update \
     && apt-get build-dep -y nginx \
-    && && wget ${SSL_URL} -O ${SSL_NAMR}.tar.gz \
-    && tar xf /opt/${SSL_NAMR}.tar.gz -C /usr/local \
+    && wget ${SSL_URL} -O ${SSL_NAMR}.tar.gz \
+    && tar xf ${SSL_NAMR}.tar.gz -C /usr/local \
     && wget http://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz \
     && tar xf nginx-${NGINX_VERSION}.tar.gz \
-    && sed -i 's@$OPENSSL/.openssl/@$OPENSSL/@g' /opt/nginx-${NGINX_VERSION}/auto/lib/openssl/conf \
-    && cd /opt/nginx-${NGINX_VERSION} \
+    && sed -i 's@$OPENSSL/.openssl/@$OPENSSL/@g' nginx-${NGINX_VERSION}/auto/lib/openssl/conf \
+    && cd nginx-${NGINX_VERSION} \
     && ./configure ${NGINX_CONFIGURE_ARGS} --with-openssl='/usr/local/${SSL_NAMR}' \
     && make -j$(nproc) \
     && make install \
     && mkdir -p /usr/share/nginx /var/cache/nginx \
     && mv /etc/nginx/html /usr/share/nginx \
-    && cd /opt \
-    && rm -rf /opt/nginx-${NGINX_VERSION} \
-    && rm -f /opt/*.tar.gz /etc/nginx/nginx.conf /etc/nginx/*.default \
+    && rm -f /etc/nginx/nginx.conf /etc/nginx/*.default \
     && echo "no" | dpkg-reconfigure dash \
     && sed -i "s@# export @export @g" ~/.bashrc \
     && sed -i "s@# alias @alias @g" ~/.bashrc \
