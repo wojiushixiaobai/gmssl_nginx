@@ -29,8 +29,8 @@ server {
     listen 443 ssl;
     server_name test.domain.localhost;  # 自行修改成你的域名
 
-    ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
-    ssl_ciphers ECC-SM4-SM3:ECDH:AESGCM:HIGH:MEDIUM:!RC4:!DH:!MD5:!aNULL:!eNULL;  # 算法
+    ssl_protocols TLSv1.1 TLSv1.2 TLSv1.3;
+    ssl_ciphers ECC-SM4-SM3:ECDH:AESGCM:HIGH:MEDIUM:!RC4:!DH:!MD5:!aNULL:!eNULL;
     ssl_verify_client off;
     ssl_session_timeout 5m;
     ssl_prefer_server_ciphers on;
@@ -55,6 +55,62 @@ docker run --name nginx -d --restart=always \
   -v /opt/sslkey:/etc/nginx/sslkey \
   -v /opt/default.conf:/etc/nginx/conf.d/default.conf \
   wojiushixiaobai/wotrus_nginx:latest
+```
+
+# GDCA 证书使用说明
+
+[GDCA数安时代](https://www.trustauth.cn/)
+
+```sh
+ll /opt/sslkey
+```
+```
+总用量 12
+-rw-r--r--. 1 root root 3048 12月  2 19:07 test.domain.localhost_encrypt_chain.crt
+-rw-r--r--. 1 root root  227 12月  2 19:07 test.domain.localhost.key
+-rw-r--r--. 1 root root 3048 12月  2 19:07 test.domain.localhost_sign_chain.crt
+```
+
+```sh
+vi /opt/default.conf
+```
+
+```
+server {
+    listen 80;
+    server_name test.domain.localhost;  # 自行修改成你的域名
+    return 301 https://$server_name$request_uri;
+}
+
+server {
+    listen 443 ssl;
+    server_name test.domain.localhost;  # 自行修改成你的域名
+
+    ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+    ssl_ciphers ECDHE-SM2-SM4-SM3:ECDHE-RSA-AES128-GCM-SHA256:ECDHE:ECDH:AES:HIGH:!NULL:!3DES:!aNULL:!MD5:!ADH:!RC4;
+    ssl_verify_client off;
+    ssl_session_timeout 5m;
+    ssl_prefer_server_ciphers on;
+
+    ssl_certificate sslkey/test.domain.localhost_sign_chain.crt;      # 配置国密签名证书/私钥
+    ssl_certificate_key sslkey/test.domain.localhost.key;
+
+    ssl_certificate sslkey/test.domain.localhost_encrypt_chain.crt;   # 配置国密加密证书/私钥
+    ssl_certificate_key sslkey/test.domain.localhost.key;
+
+    location / {
+        root   /usr/share/nginx/html;
+        index  index.html index.htm;
+    }
+}
+```
+
+```sh
+docker run --name nginx -d --restart=always \
+  -p 80:80 -p 443:443 \
+  -v /opt/sslkey:/etc/nginx/sslkey \
+  -v /opt/default.conf:/etc/nginx/conf.d/default.conf \
+  wojiushixiaobai/trustauth_nginx:latest
 ```
 
 # GMSSL 证书使用说明
@@ -103,7 +159,7 @@ server {
     server_name test.domain.localhost;  # 自行修改成你的域名
 
     ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
-    ssl_ciphers ECDHE-RSA-AES128-GCM-SHA256:AES128-SHA:DES-CBC3-SHA:ECC-SM4-CBC-SM3:ECDHE-SM4-GCM-SM3;  # 算法
+    ssl_ciphers ECDHE-RSA-AES128-GCM-SHA256:AES128-SHA:DES-CBC3-SHA:ECC-SM4-CBC-SM3:ECC-SM4-GCM-SM3;
     ssl_verify_client off;
 
     ssl_certificate sslkey/sm2.test.domain.localhost.sig.crt.pem;      # 配置国密签名证书/私钥
