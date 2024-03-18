@@ -1,7 +1,7 @@
 FROM debian:bullseye-slim as builder
 ARG TARGETARCH
 
-ENV NGINX_VERSION 1.22.1
+ENV NGINX_VERSION 1.24.0
 
 WORKDIR /data/builder/debuild
 
