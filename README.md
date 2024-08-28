@@ -115,7 +115,8 @@ docker run --name nginx -d --restart=always \
 
 # GMSSL 证书使用说明
 
-[国密SSL实验室](https://www.gmssl.cn/)
+[国密SSL guanzhi/GmSSL](https://github.com/guanzhi/GmSSL/tree/GmSSL-v2)
+使用 v2 版本，只支持 TLS 1.2
 
 ```sh
 ll /opt/sslkey
