@@ -37,10 +37,10 @@ RUN set -ex \
     && \
     case "${TARGETARCH}" in \
         amd64) \
-            SSL_URL=https://www.gmssl.cn/gmssl/down/gmssl_openssl_1.1_b2024_x64_1.tar.gz \
+            SSL_URL=https://www.gmssl.cn/gmssl/down/gmssl_openssl_b2025.0331_x64.tar.gz \
             ;; \
         arm64) \
-            SSL_URL=https://www.gmssl.cn/gmssl/down/gmssl_openssl_1.1_b2024_aarch64_1.tar.gz \
+            SSL_URL=https://www.gmssl.cn/gmssl/down/gmssl_openssl_b2025.0331_aarch64.tar.gz \
             ;; \
         *) \
             echo "Unsupported architecture: ${TARGETARCH}" \

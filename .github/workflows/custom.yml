@@ -1,12 +1,12 @@
 on:
-  push:
-    # branches:
-      # - master
-    # Publish `v1.2.3` tags as releases.
-    tags:
-      - v*
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release version'
+        required: true
+        default: '1.24.0'
 
-name: Checkout and Create Release Version
+name: Build Custom Version
 
 jobs:
   build:
@@ -23,9 +23,8 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Get tag
-        id: get_tag
         run: |
-            full_version=$(basename ${GITHUB_REF})
+            full_version=${{ github.event.inputs.version }}
             short_version=${full_version%.*}
             case ${{ matrix.component }} in
               gmssl|wotrus)
@@ -67,9 +66,7 @@ jobs:
           tags: |
             ${{ github.repository_owner }}/${{matrix.component}}_nginx:${{ env.full_version }}
             ${{ github.repository_owner }}/${{matrix.component}}_nginx:${{ env.short_version }}
-            ${{ github.repository_owner }}/${{matrix.component}}_nginx:latest
             ghcr.io/${{ github.repository_owner }}/${{matrix.component}}_nginx:${{ env.full_version }}
             ghcr.io/${{ github.repository_owner }}/${{matrix.component}}_nginx:${{ env.short_version }}
-            ghcr.io/${{ github.repository_owner }}/${{matrix.component}}_nginx:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
