@@ -1,12 +1,27 @@
+# Tongsuo
+
+- [铜锁 / Tongsuo](https://www.tongsuo.net/)
+
+铜锁开源社区目前不直接提供有偿的商业服务, 可以通过 [天威诚信](https://www.itrus.com.cn/)、问天量子、[阿里云](https://www.aliyun.com/)、BTQ、蚂蚁集团 等生态合作方采购数字证书
+
+运行容器
+```sh
+docker run --name nginx -d --restart=always \
+  -p 80:80 -p 443:443 \
+  -v /opt/sslkey:/etc/nginx/sslkey \
+  -v /opt/default.conf:/etc/nginx/conf.d/default.conf \
+  wojiushixiaobai/tongsuo_nginx:latest
+```
+
 # WoTrus 证书使用说明
 
-- [国密SSL证书试用申请指南](https://www.wotrus.com/support/freetestv1_apply_guide.htm)
+- [沃通 SSL 证书](https://www.wosign.com/Docdownload/)
 
 获取 ssl 证书后解压到服务器
 ```sh
 ll /opt/sslkey
 ```
-```
+```sh
 总用量 12
 -rw-r--r--. 1 root root 3048 12月  2 19:07 test.domain.localhost_sm2_encrypt_bundle.crt
 -rw-r--r--. 1 root root  227 12月  2 19:07 test.domain.localhost_SM2.key
@@ -18,7 +33,7 @@ ll /opt/sslkey
 vi /opt/default.conf
 ```
 
-```
+```nginx
 server {
     listen 80;
     server_name test.domain.localhost;  # 自行修改成你的域名
@@ -59,12 +74,12 @@ docker run --name nginx -d --restart=always \
 
 # GDCA 证书使用说明
 
-[GDCA数安时代](https://www.trustauth.cn/)
+[GDCA 数安时代](https://www.trustauth.cn/)
 
 ```sh
 ll /opt/sslkey
 ```
-```
+```sh
 总用量 12
 -rw-r--r--. 1 root root 3048 12月  2 19:07 test.domain.localhost_encrypt_chain.crt
 -rw-r--r--. 1 root root  227 12月  2 19:07 test.domain.localhost.key
@@ -75,7 +90,7 @@ ll /opt/sslkey
 vi /opt/default.conf
 ```
 
-```
+```nginx
 server {
     listen 80;
     server_name test.domain.localhost;  # 自行修改成你的域名
@@ -115,13 +130,15 @@ docker run --name nginx -d --restart=always \
 
 # GMSSL 证书使用说明
 
-[国密SSL实验室](https://www.gmssl.cn/)
+[国密 SSL 实验室](https://www.gmssl.cn/)
+
+> 试用版本每季度末失效，国密 SSL 协议会异常或者错误，需更新库，重新链接。请勿用于正式/生产环境
 
 ```sh
 ll /opt/sslkey
 ```
 
-```
+```sh
 总用量 72
 -rw-r--r--. 1 root root    8 12月  2 16:33 password.txt
 -rw-r--r--. 1 root root 3161 12月  2 16:33 sm2.test.domain.localhost.both.pfx
@@ -147,7 +164,7 @@ ll /opt/sslkey
 vi /opt/default.conf
 ```
 
-```
+```nginx
 server {
     listen 80;
     server_name test.domain.localhost;  # 自行修改成你的域名

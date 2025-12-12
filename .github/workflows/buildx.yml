@@ -14,13 +14,13 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        component: [gmssl, wotrus, trustauth]
+        component: [tongsuo, gmssl, wotrus, trustauth]
     permissions:
       contents: read
       packages: write
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Get tag
         id: get_tag
@@ -28,6 +28,9 @@ jobs:
             full_version=$(basename ${GITHUB_REF})
             short_version=${full_version%.*}
             case ${{ matrix.component }} in
+              tongsuo)
+                platforms="linux/amd64,linux/arm64,linux/ppc64le,linux/riscv64,linux/s390x"
+                ;;
               gmssl|wotrus)
                 platforms="linux/amd64,linux/arm64"
                 ;;
